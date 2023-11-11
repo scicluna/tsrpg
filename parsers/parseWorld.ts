@@ -11,9 +11,9 @@ export async function parseWorld(tier: number, player: Player) {
     //TS objects will then interact with the front-end in an intuitive way
 
     const itemDict = await parseItems(tier);
-    console.log(itemDict)
-    // const monsterDict = await parseMonsters(tier, itemDict);
-    // const encounterDict = await parseEncounters(tier, monsterDict, player);
+    const monsterDict = await parseMonsters(tier, itemDict); //one day allow for special attacks to be parsed here
+    const encounterDict = await parseEncounters(tier, monsterDict, player);
+    console.log(encounterDict)
     // const eventDict = await parseEvents(tier, itemDict, monsterDict, player);
     // const townDict = await parseTowns(tier, eventDict);
 
