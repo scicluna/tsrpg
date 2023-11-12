@@ -6,13 +6,13 @@ type World = {
 
 type WorldNode = {
     name: string;
-    description: string;
-    connection: WorldNode[];
-    location: Town | WorldEvent | Encounter
+    location: Town | WorldEvent | Encounter | null;
+    connectedNodes: {distance: number, nodeName: string}[] | string[];
 }
 
 type Town = {
     name: string;
+    description: string;
     visitLocations: WorldEvent[];
 }
 
@@ -29,7 +29,6 @@ type Encounter = {
 }
 
 type WorldEventChoice = {
-    name: string;
     description: string;
     outcome: WorldEventOutcome;
 }
@@ -53,7 +52,7 @@ type Monster = {
         loot: Item[];
         gold: number;
         exp: number;
-        attacks: Attack[];
+        // attacks: Attack[];
     }
 }
 
@@ -86,10 +85,10 @@ type Item = {
 
 type ItemType = "weapon" | "armor" | "consumable" | "misc";
 
-type Attack = {
-    name: string;
-    action: Function;
-}
+// type Attack = {
+//     name: string;
+//     action: Function;
+// }
 
 type Spell = {
     name: string;

@@ -1,2 +1,6 @@
-## Locations]]
-Wayfarer's Inn : [[Night of Tales]]
+## Description:
+The town is like...
+
+## Locations:
+[[Night of Tales]]
+[[Other Location]]

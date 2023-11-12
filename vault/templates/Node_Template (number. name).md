@@ -1,4 +1,4 @@
-## (Event or Encounter or Town)
+## (Event or Encounter or Town):
 [[(Name of Event or Encounter or Town)]]
 
 ## Connected Nodes:

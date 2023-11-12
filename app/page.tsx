@@ -5,6 +5,7 @@ import { loadUser } from "@/utils/loadUser";
 export default async function Home() {
   const user = await loadUser();
   const gameWorld = await parseWorld(999, user);
+  console.log(gameWorld)
   return (
     <main className="">
       <Game gameWorld={gameWorld} user={user} />

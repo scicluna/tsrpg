@@ -1,5 +1,77 @@
-import { Player } from "@/types/types";
+import fs from 'fs/promises';
+import { Player, WorldEvent, WorldEventChoice, WorldEventOutcome, WorldEventEffect, Item, Monster } from "@/types/types";
 
-export async function parseEvents(tier: number, itemDict: any, monsterDict: any, player: Player) {
+export async function parseEvents(tier: number, itemDict: { [key: string]: Item }, monsterDict: { [key: string]: Monster }, player: Player) {
+    const eventDict: { [key: string]: WorldEvent } = {};
 
+    const eventFiles = await fs.readdir(`./vault/t${tier}/events`);
+    const filteredFiles = eventFiles.filter(file => file.endsWith(".md"));
+
+    for (const file of filteredFiles) {
+        const eventContent = await fs.readFile(`./vault/t${tier}/events/${file}`, "utf-8");
+        const eventName = file.split(".")[0].replace(/-/g, " ");
+        const eventDescription = eventContent.split("## Description:")[1].split("##")[0].trim();
+
+        const choicesSection = eventContent.split("## Choices:")[1].split("##")[0].trim();
+        const worldChoices: WorldEventChoice[] = [];
+        const choices = choicesSection.split("\n\n");
+
+        for (let choice of choices) {
+            const choiceDescription = choice.split("\n")[0].split(":")[1].trim();
+            const outcomeSection = choice.split("\n").slice(1);
+
+            const outcomeDescription = outcomeSection[0].split("-")[1].split(":")[1].trim();
+            const effects = parseEffects(outcomeSection.slice(1), itemDict, monsterDict);
+
+            const worldChoice: WorldEventChoice = {
+                description: choiceDescription,
+                outcome: {
+                    description: outcomeDescription,
+                    effect: {
+                        args: effects
+                    }
+                }
+            };
+
+            worldChoices.push(worldChoice);
+        }
+
+        const worldEvent: WorldEvent = {
+            name: eventName,
+            description: eventDescription,
+            choices: worldChoices,
+        };
+
+        eventDict[eventName] = worldEvent;
+    }
+
+    return eventDict;
+}
+
+function parseEffects(effectLines: string[], itemDict: { [key: string]: Item }, monsterDict: { [key: string]: Monster }): any[] {
+    let effects: any[] = [];
+
+    for (let line of effectLines) {
+        line = line.trim();
+        if (!line) continue;
+
+        if (line.includes("=")) {
+            const [key, value] = line.split("=").map(s => s.trim().replace("- ", ""));
+            if (key.startsWith('items') || key.startsWith('monsters')) {
+                const refs = value.split("[[").slice(1).map(s => s.split("]]")[0]);
+                for (let ref of refs) {
+                    ref = ref.replace('[',"")
+                    if (itemDict[ref]) {
+                        effects.push({ type: 'item', value: itemDict[ref] });
+                    } else if (monsterDict[ref.replace('[', "")]) {
+                        effects.push({ type: 'monster', value: monsterDict[ref] });
+                    }
+                }
+            } else {
+                effects.push({ type: key.replace('- ', ''), value: value });
+            }
+        }
+    }
+
+    return effects;
 }
