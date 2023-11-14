@@ -1,0 +1,23 @@
+## Description:
+A slash of the sword...
+
+## Type:
+(Basic/Special/Spell)
+
+## Damage Bonus:
+1
+
+## Damage Multiplier:
+1
+
+## Multi-Target:
+(true or false)
+
+## MP Cost:
+(0 or mp cost)
+
+## Status:
+(key = value)
+(burn = 5)
+(poison = 5)
+(etc...)

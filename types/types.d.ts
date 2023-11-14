@@ -85,17 +85,36 @@ type Item = {
 
 type ItemType = "weapon" | "armor" | "consumable" | "misc";
 
-// type Attack = {
-//     name: string;
-//     action: Function;
-// }
-
-type Spell = {
+type Attack = {
     name: string;
-    action: Function;
-    mpCost: number;
+    description: string;
+    details: Basic | Spell | Special;
 }
 
+type Basic = {
+    damageBonus: number;
+    damageMult: number;
+}
+
+type Spell = {
+    damageBonus: number;
+    damageMult: number;
+    mpCost: number;
+    multiTarget: boolean;
+    status: {
+        [key: string] : string;
+    }
+}
+
+type Special = {
+    damageBonus: number;
+    damageMult: number;
+    mpCost: number;
+    multiTarget: boolean;
+    status: {
+        [key: string] : string;
+    }
+}
 
 // Path: types/types.d.ts
 
