@@ -52,7 +52,7 @@ type Monster = {
         loot: Item[];
         gold: number;
         exp: number;
-        // attacks: Attack[];
+        attacks: Attack[];
     }
 }
 

@@ -7,6 +7,9 @@
 ## Defense:
 0
 
+## Attacks:
+[[basic]]
+
 ## Loot:
 [[Potion]]
 

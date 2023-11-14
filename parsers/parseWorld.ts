@@ -5,7 +5,6 @@ import { parseItems } from "./parseItems";
 import { parseMonsters } from "./parseMonsters";
 import { parseNodes } from "./parseNodes";
 import { parseTowns } from "./parseTowns";
-import { connectNodes } from "./connectNodes";
 import { parseAttacks } from "./parseAttacks";
 
 export async function parseWorld(tier: number, player: Player) {
@@ -14,12 +13,11 @@ export async function parseWorld(tier: number, player: Player) {
 
     const attackDict = await parseAttacks(tier);
     const itemDict = await parseItems(tier);
-    const monsterDict = await parseMonsters(tier, itemDict); //one day allow for special attacks to be parsed here
+    const monsterDict = await parseMonsters(tier, itemDict, attackDict);
     const encounterDict = await parseEncounters(tier, monsterDict, player);
     const eventDict = await parseEvents(tier, itemDict, monsterDict, player);
     const townDict = await parseTowns(tier, eventDict);
-    const nodesDict = await parseNodes(tier, eventDict, encounterDict, townDict);
-    connectNodes(nodesDict);
-
-    return nodesDict;
+    const nodeDict = await parseNodes(tier, eventDict, encounterDict, townDict);
+    
+    return {nodeDict, attackDict, itemDict};
 }

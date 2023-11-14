@@ -3,12 +3,12 @@ import { parseWorld } from "@/parsers/parseWorld";
 import { loadUser } from "@/utils/loadUser";
 
 export default async function Home() {
-  const user = await loadUser();
-  const gameWorld = await parseWorld(999, user);
+  const player = await loadUser();
+  const {nodeDict, attackDict, itemDict} = await parseWorld(999, player);
 
   return (
     <main className="">
-      <Game gameWorld={gameWorld} user={user} />
+      <Game nodeDict={nodeDict} attackDict={attackDict} itemDict={itemDict} player={player} />
     </main>
   )
 }

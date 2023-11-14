@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import { Encounter, Town, WorldEvent, WorldNode } from "@/types/types";
+import { connectNodes } from './connectNodes';
 
 export async function parseNodes(
     tier: number, eventDict: { [key: string]: WorldEvent } = {},
@@ -45,5 +46,6 @@ export async function parseNodes(
         }
     }
 
+    connectNodes(nodesDict);
     return nodesDict;
 }

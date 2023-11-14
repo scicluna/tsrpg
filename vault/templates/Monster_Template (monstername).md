@@ -5,7 +5,11 @@
 (damage)
 
 ## Defense:
-(defense)
+(defense)a
+
+## Attacks:
+[[basic]]
+[[(other attacks)]]
 
 ## Loot:
 [[(item)]]

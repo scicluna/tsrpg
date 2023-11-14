@@ -1,8 +1,8 @@
-import { Item, Monster } from "@/types/types";
+import { Attack, Item, Monster } from "@/types/types";
 import { parseSection } from "@/utils/parseSection";
 import fs from "fs/promises";
 
-export async function parseMonsters(tier: number, itemDict: { [key: string]: Item }) {
+export async function parseMonsters(tier: number, itemDict: { [key: string]: Item }, attackDict: { [key: string]: Attack }) {
     const monsterDict: { [key: string]: Monster } = {};
 
     const monsterFiles = await fs.readdir(`./vault/t${tier}/monsters`);
@@ -19,10 +19,13 @@ export async function parseMonsters(tier: number, itemDict: { [key: string]: Ite
         const gold = parseInt(parseSection(monsterContent, "Gold"));
         const exp = parseInt(parseSection(monsterContent, "Exp"));
 
+        // Parsing Attacks
+        const monsterAttacksSection = parseSection(monsterContent, "Attacks");
+        const monsterAttacks = monsterAttacksSection.split("[[").slice(1).map(s => s.split("]]")[0]).map(attackName => attackDict[attackName]);
+
         // Parsing loot
         const lootSection = parseSection(monsterContent, "Loot");
-        const lootItems = lootSection.split("[[").slice(1).map(s => s.split("]]")[0]);
-        const loot = lootItems.map(itemName => itemDict[itemName]);
+        const lootItems = lootSection.split("[[").slice(1).map(s => s.split("]]")[0]).map(itemName => itemDict[itemName]);
 
         // Constructing the monster
         const monster: Monster = {
@@ -32,7 +35,8 @@ export async function parseMonsters(tier: number, itemDict: { [key: string]: Ite
                 hp,
                 damage,
                 defense,
-                loot,
+                attacks: monsterAttacks,
+                loot: lootItems,
                 gold,
                 exp,
             }
