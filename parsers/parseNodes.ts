@@ -17,7 +17,7 @@ export async function parseNodes(
         const nodeName = file.split(".")[1].replace(/-/g, " ").trim();
         const nodeContent = await fs.readFile(`./vault/t${tier}/nodes/${file}`, "utf-8");
 
-        const locationType = nodeContent.split("\n")[0].replace("## ","").replace(":","").trim();
+        const locationType = nodeContent.split("\n")[0].replace("## ","").replace(":","").trim() as "Town" | "Event" | "Encounter";
         const locationEvent = nodeContent.split("\n")[1].replace("[[", "").replace("]]", "").trim();    
         let location = null;
         switch (locationType){
@@ -33,16 +33,14 @@ export async function parseNodes(
                 location = eventDict[locationEvent];
                 break;
             }
-            case "Empty":{
-                location = null;
-                break;
-            }
         }
         const connectedNodes = nodeContent.split("## Connected Nodes:")[1].split("\n").filter(node => node.trim() != "").map(node => node.trim().replace("[[", "").replace("]]", ""))
         nodesDict[nodeName] = {
             name: nodeName,
+            locationType: locationType,
             location: location,
             connectedNodes: connectedNodes,
+            complete: false
         }
     }
 

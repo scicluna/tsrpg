@@ -7,7 +7,9 @@ type World = {
 type WorldNode = {
     name: string;
     location: Town | WorldEvent | Encounter | null;
+    locationType: "Town" | "Event" | "Encounter"
     connectedNodes: {distance: number, nodeName: string}[] | string[];
+    complete: boolean
 }
 
 type Town = {
