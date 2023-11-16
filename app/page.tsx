@@ -3,8 +3,8 @@ import { parseWorld } from "@/parsers/parseWorld";
 import { loadUser } from "@/utils/loadUser";
 
 export default async function Home() {
-  const playerData = await loadUser();
   const {nodeDict, attackDict, itemDict} = await parseWorld(999);
+  const playerData = await loadUser(attackDict,itemDict, nodeDict);
 
   return (
     <main className="">

@@ -68,11 +68,16 @@ type Player = {
         maxmp: number;
         damage: number;
         defense: number;
-        inventory: Item[];
+        inventory: {quantity: number, details: Item}[];
         gold: number;
         exp: number;
         level: number;
         attacks: Attack[];
+        equipped: {
+            weapon: Item | null;
+            armor: Item | null;
+            accessory: Item | null;
+        }
     }
 }
 
@@ -81,7 +86,7 @@ type Item = {
     description: string;
     type: ItemType;
     stats: {
-        args: any[];
+        [key: string] : number;
     }
 }
 

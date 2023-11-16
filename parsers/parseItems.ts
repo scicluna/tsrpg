@@ -27,9 +27,7 @@ export async function parseItems(tier: number) {
             name: itemName,
             description: itemDescription,
             type: itemType as ItemType,
-            stats: {
-                args: [stats]
-            }
+            stats: stats
         };
 
         itemDict[itemName] = item;

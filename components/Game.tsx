@@ -1,5 +1,5 @@
 "use client"
-import useNode from "@/useNode";
+import useNode from "@/hooks/useNode";
 import usePlayer from "@/hooks/usePlayer";
 import { Attack, Item, WorldNode, WorldEvent, Player } from "@/types/types";
 import ChooseLocation from "./ChooseLocation";
@@ -18,7 +18,7 @@ type GameProps = {
 };
 
 export default function Game({ nodeDict, attackDict, itemDict, playerData }: GameProps) {
-    const { currentNode, moveToNode} = useNode(nodeDict, nodeDict[Object.keys(nodeDict)[0]].name);
+    const { currentNode, moveToNode} = useNode(nodeDict);
     const { playerState, updatePlayer} = usePlayer(playerData)
     
     function locationTypeSwitch(){

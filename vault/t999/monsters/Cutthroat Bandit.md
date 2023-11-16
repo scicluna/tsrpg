@@ -11,7 +11,7 @@
 [[basic]]
 
 ## Loot:
-[[Potion]]
+[[potion]]
 
 ## Gold:
 5

@@ -5,6 +5,6 @@ A simple red potion that knits your wounds together
 consumable
 
 ## Stats:
-healing = 10
+hp = 10
 
 ## Special:
