@@ -60,6 +60,7 @@ type Monster = {
 
 type Player = {
     name: string;
+    location: string;
     stats: {
         hp: number;
         maxhp: number;
@@ -72,7 +73,6 @@ type Player = {
         exp: number;
         level: number;
         attacks: Attack[];
-        spells: Spell[];
     }
 }
 

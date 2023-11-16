@@ -1,14 +1,14 @@
 import { WorldNode } from "@/types/types";
 
-type TownProps = {
+type ChooseLocationProps = {
     node: WorldNode;
     player: any;
     updatePlayer: (any:any) => void;
     moveToNode: (any:any) => void;
 }
 
-export default function Town({node, player, updatePlayer, moveToNode}: TownProps){
+export default function ChooseLocation({node, moveToNode}: ChooseLocationProps){
     return (
-        <h1>TOWN</h1>
+        <h1>CHOOSE LOCATION</h1>
     )
 }

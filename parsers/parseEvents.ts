@@ -1,12 +1,12 @@
 import fs from 'fs/promises';
 import { Player, WorldEvent, WorldEventChoice, WorldEventOutcome, WorldEventEffect, Item, Monster } from "@/types/types";
 
-export async function parseEvents(tier: number, itemDict: { [key: string]: Item }, monsterDict: { [key: string]: Monster }, player: Player) {
+export async function parseEvents(tier: number, itemDict: { [key: string]: Item }, monsterDict: { [key: string]: Monster }) {
     const eventDict: { [key: string]: WorldEvent } = {};
 
     const eventFiles = await fs.readdir(`./vault/t${tier}/events`);
     const filteredFiles = eventFiles.filter(file => file.endsWith(".md"));
-
+ 
     for (const file of filteredFiles) {
         const eventContent = await fs.readFile(`./vault/t${tier}/events/${file}`, "utf-8");
         const eventName = file.split(".")[0].replace(/-/g, " ");

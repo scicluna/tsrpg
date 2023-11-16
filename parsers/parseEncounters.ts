@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import { Encounter, Monster, Player } from "@/types/types";
 import { parseSection } from "@/utils/parseSection";
 
-export async function parseEncounters(tier: number, monsterDict: { [key: string]: Monster } = {}, player: Player) {
+export async function parseEncounters(tier: number, monsterDict: { [key: string]: Monster } = {}) {
     const encounterDict: { [key: string]: Encounter } = {};
 
     const encounterFiles = await fs.readdir(`./vault/t${tier}/encounters`);

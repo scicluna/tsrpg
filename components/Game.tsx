@@ -1,54 +1,58 @@
 "use client"
 import useNode from "@/useNode";
 import usePlayer from "@/hooks/usePlayer";
-import { Attack, Item, WorldNode, WorldEvent } from "@/types/types";
+import { Attack, Item, WorldNode, WorldEvent, Player } from "@/types/types";
+import ChooseLocation from "./ChooseLocation";
+import Encounter from "./Encounter";
+import Town from "./Town";
+import NodeEvent from "./NodeEvent";
+import InventoryTab from "./InventoryTab";
+import StatusTab from "./StatusTab";
 
 
 type GameProps = {
     nodeDict:  {[key: string]: WorldNode};
     attackDict: {[key: string]: Attack};
     itemDict: {[key: string]: Item};
-    player: any
+    playerData: Player;
 };
 
-export default function Game({ nodeDict, attackDict, itemDict, player }: GameProps) {
-    /*
-    flow: check current node and establish whether or not theres an encounter
-    if there is an encounter, trigger combat component
-    else
-    trigger event component
-    after event or combat, update player state and offer connected nodes as options to move onto
-    */
+export default function Game({ nodeDict, attackDict, itemDict, playerData }: GameProps) {
     const { currentNode, moveToNode} = useNode(nodeDict, nodeDict[Object.keys(nodeDict)[0]].name);
-    const { playerState, updatePlayer} = usePlayer(player)
+    const { playerState, updatePlayer} = usePlayer(playerData)
     
-    if (!currentNode.complete){
-        switch(currentNode.locationType){
-            case "Event":
-                return (
-                    <Event event={currentNode.location} player={playerState} updatePlayer={updatePlayer} />
-                )
-            case "Encounter":
-                return (
-                    <Encounter encounter={currentNode.location} player={playerState} updatePlayer={updatePlayer} />
-                )
-            case "Town":
-                return (
-                    <Town town={currentNode.location} player={playerState} updatePlayer={updatePlayer} />
-                )
+    function locationTypeSwitch(){
+        if (!currentNode.complete){
+            switch(currentNode.locationType){
+                case "Event":
+                    return (
+                        <NodeEvent node={currentNode} player={playerState} 
+                        updatePlayer={updatePlayer} />
+                    )
+                case "Encounter":
+                    return (
+                        <Encounter node={currentNode} player={playerState} 
+                        updatePlayer={updatePlayer} />
+                    )
+                case "Town":
+                    return (
+                        <Town node={currentNode} player={playerState} 
+                        updatePlayer={updatePlayer} moveToNode={moveToNode}/>
+                    )
+            }
+        } else {
+            return (
+                <ChooseLocation node={currentNode} player={playerState} 
+                updatePlayer={updatePlayer} moveToNode={moveToNode}/>
+            )
         }
-    } else {
-        return (
-            <ChooseLocation node={currentNode} moveToNode={moveToNode}/>
-        )
     }
 
-    //player hook/state
-    //node hook/state
-    
-    //combat component
-    //event component
-    //status component
-    //inventory component
-    //movement component
+    return (
+        <main>
+            {locationTypeSwitch()}
+            <StatusTab player={playerState} updatePlayer={updatePlayer}/>
+            <InventoryTab player={playerState} updatePlayer={updatePlayer}/>
+        </main>
+    )
 }
