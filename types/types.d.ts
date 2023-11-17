@@ -37,11 +37,9 @@ type WorldEventChoice = {
 
 type WorldEventOutcome = {
     description: string;
-    effect: WorldEventEffect;
-}
-
-type WorldEventEffect = {
-    args: any[];
+    effects: {
+        [key: string] : any;
+    };
 }
 
 type Monster = {
@@ -80,6 +78,8 @@ type Player = {
         }
     }
 }
+
+type EffectTypes = "hp" | "maxhp" | "mp" | "maxmp" | "damage" | "defense" | "gold" | "exp" | "items" | "attacks" | "monsters";
 
 type Item = {
     name: string;

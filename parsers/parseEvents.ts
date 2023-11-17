@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { Player, WorldEvent, WorldEventChoice, WorldEventOutcome, WorldEventEffect, Item, Monster } from "@/types/types";
+import { Player, WorldEvent, WorldEventChoice, WorldEventOutcome, Item, Monster } from "@/types/types";
 
 export async function parseEvents(tier: number, itemDict: { [key: string]: Item }, monsterDict: { [key: string]: Monster }) {
     const eventDict: { [key: string]: WorldEvent } = {};
@@ -27,9 +27,7 @@ export async function parseEvents(tier: number, itemDict: { [key: string]: Item 
                 description: choiceDescription,
                 outcome: {
                     description: outcomeDescription,
-                    effect: {
-                        args: effects
-                    }
+                    effects: effects,
                 }
             };
 
@@ -50,6 +48,8 @@ export async function parseEvents(tier: number, itemDict: { [key: string]: Item 
 
 function parseEffects(effectLines: string[], itemDict: { [key: string]: Item }, monsterDict: { [key: string]: Monster }): any[] {
     let effects: any[] = [];
+    let monsters = [];
+    let items = [];
 
     for (let line of effectLines) {
         line = line.trim();
@@ -62,16 +62,18 @@ function parseEffects(effectLines: string[], itemDict: { [key: string]: Item }, 
                 for (let ref of refs) {
                     ref = ref.replace('[',"")
                     if (itemDict[ref]) {
-                        effects.push({ type: 'item', value: itemDict[ref] });
-                    } else if (monsterDict[ref.replace('[', "")]) {
-                        effects.push({ type: 'monster', value: monsterDict[ref] });
+                        items.push(itemDict[ref]);
+                    } else if (monsterDict[ref]) {
+                        monsters.push(monsterDict[ref]);
                     }
                 }
             } else {
-                effects.push({ type: key.replace('- ', ''), value: value });
+                effects.push({ [key.replace('- ', '')]: value });
             }
         }
     }
+    if (monsters.length) effects.push({ monsters: monsters });
+    if (items.length) effects.push({ items: items });
 
     return effects;
 }

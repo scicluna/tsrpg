@@ -4,7 +4,7 @@ A dense, otherworldly fog blankets the hills. Shapes and whispers flit just out 
 ## Choices:
 Description: Investigate the whispers.
 - Outcome: Find a lost traveler. He's grateful and gives you 2 gold. (Gain 2 gold)
-- items = \[[[Potion]]]
+- items = \[[[potion]]]
 
 Description: Stay on the path.
 - Outcome: Avoid potential danger. Nothing else happens.

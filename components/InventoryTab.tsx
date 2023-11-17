@@ -16,9 +16,8 @@ type InventoryTabProps = {
 export default function InventoryTab({player, updatePlayer}: InventoryTabProps){
 
     function useItem(item: Item){
-        const itemType = item.type
-        if (itemType === "consumable"){
-            const newPlayer = {...player}
+        const newPlayer = {...player}
+        if (item.type === "consumable"){
             if (item.stats["hp"]){
                 newPlayer.stats.hp = Math.min(newPlayer.stats.hp + item.stats["hp"], newPlayer.stats.maxhp)
             }
@@ -32,6 +31,14 @@ export default function InventoryTab({player, updatePlayer}: InventoryTabProps){
                 return invItem
             })).filter((invItem) => invItem.quantity > 0)
             updatePlayer(newPlayer)
+        }
+        if (item.type === "weapon"){
+            newPlayer.stats.equipped.weapon = item
+            updatePlayer(newPlayer)    
+        }
+        if (item.type === "armor"){
+            newPlayer.stats.equipped.armor = item
+            updatePlayer(newPlayer)    
         }
     }
 

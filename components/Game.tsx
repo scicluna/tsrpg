@@ -18,7 +18,7 @@ type GameProps = {
 };
 
 export default function Game({ nodeDict, attackDict, itemDict, playerData }: GameProps) {
-    const { currentNode, moveToNode} = useNode(nodeDict);
+    const { currentNode, moveToNode, updateNode} = useNode(nodeDict);
     const { playerState, updatePlayer} = usePlayer(playerData)
     
     function locationTypeSwitch(){
@@ -27,7 +27,7 @@ export default function Game({ nodeDict, attackDict, itemDict, playerData }: Gam
                 case "Event":
                     return (
                         <NodeEvent node={currentNode} player={playerState} 
-                        updatePlayer={updatePlayer} />
+                        updatePlayer={updatePlayer} updateNode={updateNode}/>
                     )
                 case "Encounter":
                     return (

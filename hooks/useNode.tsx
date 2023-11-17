@@ -11,8 +11,13 @@ export default function useNode(nodeDict:  {[key: string]: WorldNode}){
         setCurrentNode(nodeDict[nodeName])
     }
 
+    function updateNode(node: WorldNode){
+        nodeDict[node.name] = node
+    }
+
     return {
         currentNode,
-        moveToNode
+        moveToNode,
+        updateNode
     }
 }
