@@ -1,6 +1,6 @@
 "use client"
 
-import { EffectTypes, Encounter, Player, WorldEvent, WorldEventChoice, WorldNode } from "@/types/types"
+import { EffectTypes, Encounter, Item, Monster, Player, SimpleEffectTypes, WorldEvent, WorldEventChoice, WorldNode } from "@/types/types"
 import { Button } from "./ui/button";
 
 type NodeEventProps = {
@@ -8,35 +8,57 @@ type NodeEventProps = {
     player: Player;
     updatePlayer: (any:any) => void;
     updateNode: (any:any) => void;
+    eventDict: {[key: string]: WorldEvent};
+    monsterDict: {[key: string]: Monster};
 }
 
-export default function NodeEvent({node, player, updatePlayer, updateNode}: NodeEventProps){
+type EffectValue = number | string | Monster[] | Item[]
+
+type Effects = {
+    [key in EffectTypes]: EffectValue;
+};
+
+export default function NodeEvent({node, player, updatePlayer, updateNode, eventDict, monsterDict}: NodeEventProps){
     const location = node.location as WorldEvent
 
     function chooseOption(choice: WorldEventChoice){
         const newPlayer = {...player}
-        const effectArray = choice.outcome
-        const effects = Object.keys(effectArray.effects) as EffectTypes[]
-        effects.forEach((effect : EffectTypes ) => {
-            if (effect === "items" || effect === "attacks"){
-                newPlayer.stats.inventory.push(effectArray.effects[effect])
+        const effects = choice.outcome.effects as Effects[];
+        let stayFlag = false;
+        effects.forEach((effect) => {
+            const [effectKey, effectValue] = Object.entries(effect).flat(1)
+            if (effectKey === "items" || effectKey === "attacks"){
+                const itemList = effectValue as Item[];
+                itemList.forEach(item => {
+                    newPlayer.stats.inventory.push({details: item, quantity: 1})
+                })
             } 
-            else if (effect === "monsters"){
+            else if (effectKey === "monsters"){
+                const monsters = effectValue as Monster[]
                 // Transform the current node into an Encounter
                 const encounter: Encounter = {
                     name: "Event Encounter",
                     description: "A sudden challenge appears!",
-                    enemies: effectArray.effects[effect] // Assuming this is an array of monsters
+                    enemies: monsters// Assuming this is an array of monsters
                 };
                 node.location = encounter;
                 node.locationType = "Encounter";
+                stayFlag = true;
+            } 
+            else if (effectKey === "event"){
+                console.log(effectValue)
+                const eventName = effectValue as string;
+                // Transform current node event into new node event
+                const event: WorldEvent = eventDict[eventName];
+                node.location = event;
+                stayFlag = true;
             }
             else {
-                newPlayer.stats[effect] += effectArray.effects[effect]
+                newPlayer.stats[effectKey as SimpleEffectTypes] += effectValue as number
             }
         })
         updatePlayer(newPlayer)
-        if (!effects.includes("monsters")){
+        if (!stayFlag){
             node.complete = true
         }
         updateNode(node)

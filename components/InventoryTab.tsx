@@ -34,10 +34,12 @@ export default function InventoryTab({player, updatePlayer}: InventoryTabProps){
         }
         if (item.type === "weapon"){
             newPlayer.stats.equipped.weapon = item
+            newPlayer.stats.damage = item.stats.damage + 1
             updatePlayer(newPlayer)    
         }
         if (item.type === "armor"){
             newPlayer.stats.equipped.armor = item
+            newPlayer.stats.defense = item.stats.defense
             updatePlayer(newPlayer)    
         }
     }

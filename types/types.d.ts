@@ -84,7 +84,8 @@ type Player = {
     }
 }
 
-type EffectTypes = "hp" | "maxhp" | "mp" | "maxmp" | "damage" | "defense" | "gold" | "exp" | "items" | "attacks" | "monsters";
+type EffectTypes = "hp" | "maxhp" | "mp" | "maxmp" | "damage" | "defense" | "gold" | "exp" | "items" | "attacks" | "monsters" | "event";
+type SimpleEffectTypes = "hp" | "maxhp" | "mp" | "maxmp" | "damage" | "defense" | "gold" | "exp";
 
 type Item = {
     name: string;

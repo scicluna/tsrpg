@@ -18,5 +18,5 @@ export async function parseWorld(tier: number) {
     const townDict = await parseTowns(tier, eventDict);
     const nodeDict = await parseNodes(tier, eventDict, encounterDict, townDict);
     
-    return {nodeDict, attackDict, itemDict};
+    return {nodeDict, attackDict, itemDict, eventDict, monsterDict};
 }

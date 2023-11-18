@@ -7,8 +7,14 @@ Description: Investigate the whispers.
 - items = \[[[potion]]]
 
 Description: Stay on the path.
-- Outcome: Avoid potential danger. Nothing else happens.
+- Outcome: Avoid potential danger! Woah, an ancient altar!
+- event = [[Ancient Altar Ritual]]
+- gold = 1
 
 Description: Venture into the fog.
 - Outcome: Discover a hidden cave. Inside you find some gold ore! (Gain 3 gold)
 - gold_change = 3
+
+Description: WOAH A MONSTER.
+- Outcome: A monster attacks you!
+- monsters = \[[[Cutthroat Bandit]]]

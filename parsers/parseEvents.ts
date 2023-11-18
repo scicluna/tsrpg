@@ -57,7 +57,7 @@ function parseEffects(effectLines: string[], itemDict: { [key: string]: Item }, 
 
         if (line.includes("=")) {
             const [key, value] = line.split("=").map(s => s.trim().replace("- ", ""));
-            if (key.startsWith('items') || key.startsWith('monsters')) {
+            if (key.startsWith('items') || key.startsWith('monsters')){
                 const refs = value.split("[[").slice(1).map(s => s.split("]]")[0]);
                 for (let ref of refs) {
                     ref = ref.replace('[',"")
@@ -67,6 +67,8 @@ function parseEffects(effectLines: string[], itemDict: { [key: string]: Item }, 
                         monsters.push(monsterDict[ref]);
                     }
                 }
+            } else if (key.startsWith('event')) {
+                effects.push({ [key.replace('- ', '')]: value.replace('[[', '').replace(']]', '') });
             } else {
                 effects.push({ [key.replace('- ', '')]: value });
             }
