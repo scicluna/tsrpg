@@ -64,7 +64,7 @@ function parseEffects(effectLines: string[], itemDict: { [key: string]: Item }, 
                     if (itemDict[ref]) {
                         items.push(itemDict[ref]);
                     } else if (monsterDict[ref]) {
-                        monsters.push(monsterDict[ref]);
+                        monsters.push(structuredClone(monsterDict[ref]));
                     }
                 }
             } else if (key.startsWith('event')) {

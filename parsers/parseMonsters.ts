@@ -33,6 +33,7 @@ export async function parseMonsters(tier: number, itemDict: { [key: string]: Ite
             description: "", // Assuming there's no description section in the file
             stats: {
                 hp,
+                maxhp : hp,
                 damage,
                 defense,
                 attacks: monsterAttacks,

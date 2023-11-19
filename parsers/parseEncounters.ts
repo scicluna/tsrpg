@@ -15,7 +15,7 @@ export async function parseEncounters(tier: number, monsterDict: { [key: string]
 
         const monsterSection = parseSection(encounterContent, "Monsters");
         const monsterNames = monsterSection.split("[[").slice(1).map(s => s.split("]]")[0]);
-        const monsters = monsterNames.map(monsterName => monsterDict[monsterName]);
+        const monsters = monsterNames.map(monsterName => structuredClone(monsterDict[monsterName]));
 
         const encounter: Encounter = {
             name: encounterName,

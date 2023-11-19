@@ -35,7 +35,7 @@ export default function Game({ nodeDict, attackDict, itemDict, eventDict, monste
                 case "Encounter":
                     return (
                         <Encounter node={currentNode} player={playerState} 
-                        updatePlayer={updatePlayer} />
+                        updatePlayer={updatePlayer} updateNode={updateNode}/>
                     )
                 case "Town":
                     return (

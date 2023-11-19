@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { Attack, Basic, Spell, Special } from '@/types/types';
+import { Attack, Basic, Spell, Special, AttackType } from '@/types/types';
 
 export async function parseAttacks(tier: number){
     const attackDict: { [key: string]: Attack } = {};
@@ -72,6 +72,7 @@ export async function parseAttacks(tier: number){
             }
         const attack: Attack = {
             name: attackName,
+            attackType: attackType.toLowerCase() as AttackType,
             description: attackDescription,
             details: attackDetails
         };

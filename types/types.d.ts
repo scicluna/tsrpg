@@ -52,6 +52,7 @@ type Monster = {
     description: string;
     stats: {
         hp: number;
+        maxhp: number;
         damage: number;
         defense: number;
         loot: Item[];
@@ -101,8 +102,11 @@ type ItemType = "weapon" | "armor" | "consumable" | "misc";
 type Attack = {
     name: string;
     description: string;
+    attackType: AttackType;
     details: Basic | Spell | Special;
 }
+
+type AttackType = "basic" | "spell" | "special";
 
 type Basic = {
     damageBonus: number;
