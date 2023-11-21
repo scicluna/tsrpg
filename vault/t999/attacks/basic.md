@@ -5,7 +5,7 @@ A basic attack action
 Basic
 
 ## Damage Bonus:
-1
+0
 
 ## Damage Multiplier:
 1

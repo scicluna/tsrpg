@@ -8,6 +8,7 @@ import Town from "./Town";
 import NodeEvent from "./NodeEvent";
 import InventoryTab from "./InventoryTab";
 import StatusTab from "./StatusTab";
+import GameOver from "./GameOver";
 
 
 type GameProps = {
@@ -22,6 +23,18 @@ type GameProps = {
 export default function Game({ nodeDict, attackDict, itemDict, eventDict, monsterDict, playerData }: GameProps) {
     const { currentNode, moveToNode, updateNode} = useNode(nodeDict);
     const { playerState, updatePlayer} = usePlayer(playerData)
+
+    if (playerState.stats.hp <= 0){
+        return (
+            <GameOver/>
+        )
+    }
+
+    if (!currentNode){
+        return (
+            <GameOver/>
+        )
+    }
     
     function locationTypeSwitch(){
         if (!currentNode.complete){

@@ -2,7 +2,7 @@
 6
 
 ## Damage:
-2
+1
 
 ## Defense:
 0

@@ -12,7 +12,7 @@ export async function loadUser(attackDict: { [key: string]: Attack}, itemDict: {
             maxhp: 20,
             mp: 10,
             maxmp: 10,
-            damage: 1,
+            damage: 2,
             defense: 0,
             exp: 0,
             level: 1,

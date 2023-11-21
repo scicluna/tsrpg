@@ -54,7 +54,8 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
                 stayFlag = true;
             }
             else {
-                newPlayer.stats[effectKey as SimpleEffectTypes] += effectValue as number
+                //ewww
+                newPlayer.stats[effectKey as SimpleEffectTypes] += parseInt(effectValue as string)
             }
         })
         updatePlayer(newPlayer)

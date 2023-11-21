@@ -55,14 +55,26 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
     }
 
     //monster counter attacks
+    //handle status effects somehow
     function monsterAttack(){
         const newPlayer = {...player}
-        
+        monsters.forEach(monster => {
+            const attack = monster.stats.attacks[Math.floor(Math.random() * monster.stats.attacks.length)]
+            const damage = (attack.details.damageBonus + monster.stats.damage - newPlayer.stats.defense) * (attack.details.damageMult)
+            newPlayer.stats.hp = Math.max(newPlayer.stats.hp - damage, 0)
+        })
+        updatePlayer(newPlayer)
     }
 
     return (
         <main className="h-screen w-full flex items-center justify-center gap-40">
             <div className="grid grid-cols-1 gap-6">
+                <div className="flex flex-col">
+                    <h1>{player.name}</h1>
+                    <h1>HP: {player.stats.hp}/{player.stats.maxhp}</h1>
+                    <h1>MP: {player.stats.mp}/{player.stats.maxmp}</h1>
+                </div>
+
                 {player.stats.attacks.map(attack => (
                     <Button onClick={()=>attackTarget(attack)} key={attack.name}>{attack.name}</Button>
                 ))}
