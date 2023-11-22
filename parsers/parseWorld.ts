@@ -9,6 +9,7 @@ import { parseAttacks } from "./parseAttacks";
 export async function parseWorld(tier: number) {
     //will take MD from vault files and convert them into a series of TS objects under the struct "World"
     //TS objects will then interact with the front-end in an intuitive way
+    //is it good now? idk. it's better than it was before, but it's still not great.
 
     const attackDict = await parseAttacks(tier);
     const itemDict = await parseItems(tier);
