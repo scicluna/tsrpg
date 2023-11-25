@@ -1,0 +1,5 @@
+Scrolling Effects (+4 gold, Item: Potion, etc...) - scroll down animation over middle - done i think
+Battle Scrolling  Effects (-4 damage, etc...) - done for monsters (work on styling/location later)
+Battle Enemy Sprites and HP Bars
+Stagger Enemy Attacks - done
+

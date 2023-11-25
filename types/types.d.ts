@@ -82,6 +82,7 @@ type Player = {
             armor: Item | null;
             accessory: Item | null;
         }
+        days: number;
     }
 }
 

@@ -23,7 +23,8 @@ export async function loadUser(attackDict: { [key: string]: Attack}, itemDict: {
                 weapon: null,
                 armor: null,
                 accessory: null,
-            }
+            },
+            days: 0,
         }
     }
 

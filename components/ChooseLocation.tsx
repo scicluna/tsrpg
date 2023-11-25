@@ -11,9 +11,9 @@ type ChooseLocationProps = {
 export default function ChooseLocation({node, player, moveToNode, updatePlayer}: ChooseLocationProps){
     
     //optional, possible i want more logic here
-    function chooseLocation(nodeName: string){
-        moveToNode(nodeName)
-        updatePlayer({...player , location: nodeName})
+    function chooseLocation(nodeToConnect: ConnectedNode){
+        moveToNode(nodeToConnect.nodeName)
+        updatePlayer({...player , location: nodeToConnect.nodeName, stats: {...player.stats, days: player.stats.days+nodeToConnect.distance}})
     }
 
     return (
@@ -23,9 +23,9 @@ export default function ChooseLocation({node, player, moveToNode, updatePlayer}:
         </div>
         <div className="grid grid-cols-2 gap-6">
             {node.connectedNodes.map((connectedNode) => {
-                const nodeConnections = connectedNode as ConnectedNode
+                const nodeConnection = connectedNode as ConnectedNode
                 return (
-                    <Button key={nodeConnections.nodeName} onClick={()=>chooseLocation(nodeConnections.nodeName)}>{nodeConnections.nodeName}</Button>
+                    <Button key={nodeConnection.nodeName} onClick={()=>chooseLocation(nodeConnection)}>{`${nodeConnection.nodeName} - ${nodeConnection.distance} Days`}</Button>
                 )
             })}
         </div>

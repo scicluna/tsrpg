@@ -9,6 +9,7 @@ import NodeEvent from "./NodeEvent";
 import InventoryTab from "./InventoryTab";
 import StatusTab from "./StatusTab";
 import GameOver from "./GameOver";
+import Progress from "./Progress";
 
 
 type GameProps = {
@@ -66,6 +67,7 @@ export default function Game({ nodeDict, attackDict, itemDict, eventDict, monste
 
     return (
         <main>
+            <Progress player={playerState}/>
             {locationTypeSwitch()}
             <StatusTab player={playerState} updatePlayer={updatePlayer}/>
             <InventoryTab player={playerState} updatePlayer={updatePlayer}/>

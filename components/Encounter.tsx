@@ -13,6 +13,8 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
     const location = node.location as Encounter
     const [monsters, setMonsters] = useState<Monster[]>(location.enemies);
     const [target, setTarget] = useState<number>(0)
+    const [scrollingEffect, setScrollingEffect] = useState<{color: string, text: string}>({color: "", text: ""});
+    const [waiting, setWaiting] = useState<boolean>(false);
     
     function selectTarget(i: number){
         setTarget(i)
@@ -56,14 +58,36 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
 
     //monster counter attacks
     //handle status effects somehow
-    function monsterAttack(){
-        const newPlayer = {...player}
-        monsters.forEach(monster => {
-            const attack = monster.stats.attacks[Math.floor(Math.random() * monster.stats.attacks.length)]
-            const damage = (attack.details.damageBonus + monster.stats.damage - newPlayer.stats.defense) * (attack.details.damageMult)
-            newPlayer.stats.hp = Math.max(newPlayer.stats.hp - damage, 0)
-        })
-        updatePlayer(newPlayer)
+    async function monsterAttack() {
+        setWaiting(true);
+        const newPlayer = {...player};
+    
+        for (let i = 0; i < monsters.length; i++) {
+            await new Promise(resolve => {
+                setTimeout(() => {
+                    const monster = monsters[i];
+                    const attack = monster.stats.attacks[Math.floor(Math.random() * monster.stats.attacks.length)];
+                    const damage = (attack.details.damageBonus + monster.stats.damage - newPlayer.stats.defense) * (attack.details.damageMult);
+                    newPlayer.stats.hp = Math.max(newPlayer.stats.hp - damage, 0);
+    
+                    scrollText("red", `${monster.name} attacked ${newPlayer.name} for ${damage} damage!`)
+                    // Update the player after each attack
+                    updatePlayer({...newPlayer});
+    
+                    // Resolve the promise after the attack is done
+                    resolve("done");
+                }, 1000);
+            });
+        }
+    
+        setWaiting(false);
+    }
+
+    function scrollText(color: string, text: string){
+        setScrollingEffect({color: color, text: text})
+        setTimeout(() => {
+            setScrollingEffect({color: "", text: ""})
+        }, 600)
     }
 
     return (
@@ -76,13 +100,16 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
                 </div>
 
                 {player.stats.attacks.map(attack => (
-                    <Button onClick={()=>attackTarget(attack)} key={attack.name}>{attack.name}</Button>
+                    <Button disabled={waiting} onClick={()=>attackTarget(attack)} key={attack.name}>{attack.name}</Button>
                 ))}
             </div>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-12">
                 {monsters.map((monster, i) => (
                     <Button onClick={()=>selectTarget(i)} variant={i === target ? "destructive" : "default"} key={`${i}-${monster.name}`}>{monster.name} - {monster.stats.hp}/{monster.stats.maxhp}</Button>
                 ))}
+                <div className={`-translate-x-1/2 translate-y-full transition-all absolute top-1/2 left-1/2 z-20`}>
+                    <p className="text-2xl font-mono animate-bounce" style={{color: scrollingEffect.color}}>{scrollingEffect.text}</p>
+                </div>
             </div>
         </main>
     )
