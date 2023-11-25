@@ -17,4 +17,4 @@ Description: Venture into the fog.
 
 Description: WOAH A MONSTER.
 - Outcome: A monster attacks you!
-- monsters = \[[[Cutthroat Bandit]], [[Cutthroat Bandit]], [[Cutthroat Bandit]], [[Cutthroat Bandit]]]
+- monsters = \[[[Bandit]], [[Bandit]], [[Bandit]], [[Bandit]]]

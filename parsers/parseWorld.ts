@@ -5,6 +5,7 @@ import { parseMonsters } from "./parseMonsters";
 import { parseNodes } from "./parseNodes";
 import { parseTowns } from "./parseTowns";
 import { parseAttacks } from "./parseAttacks";
+import { parseMonsterImages } from "./parseMonsterImages";
 
 export async function parseWorld(tier: number) {
     //will take MD from vault files and convert them into a series of TS objects under the struct "World"
@@ -13,7 +14,8 @@ export async function parseWorld(tier: number) {
 
     const attackDict = await parseAttacks(tier);
     const itemDict = await parseItems(tier);
-    const monsterDict = await parseMonsters(tier, itemDict, attackDict);
+    const monsterImageDict = parseMonsterImages();
+    const monsterDict = await parseMonsters(tier, itemDict, attackDict, monsterImageDict);
     const encounterDict = await parseEncounters(tier, monsterDict);
     const eventDict = await parseEvents(tier, itemDict, monsterDict);
     const townDict = await parseTowns(tier, eventDict);

@@ -60,6 +60,8 @@ type Monster = {
         exp: number;
         attacks: Attack[];
     }
+    image: string;
+    id: string;
 }
 
 type Player = {

@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import { Encounter, Monster, Player } from "@/types/types";
 import { parseSection } from "@/utils/parseSection";
+import { randomUUID } from "crypto";
 
 export async function parseEncounters(tier: number, monsterDict: { [key: string]: Monster } = {}) {
     const encounterDict: { [key: string]: Encounter } = {};
@@ -15,7 +16,7 @@ export async function parseEncounters(tier: number, monsterDict: { [key: string]
 
         const monsterSection = parseSection(encounterContent, "Monsters");
         const monsterNames = monsterSection.split("[[").slice(1).map(s => s.split("]]")[0]);
-        const monsters = monsterNames.map(monsterName => structuredClone(monsterDict[monsterName]));
+        const monsters = monsterNames.map(monsterName => structuredClone({...monsterDict[monsterName], id: randomUUID()}));
 
         const encounter: Encounter = {
             name: encounterName,

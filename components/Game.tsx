@@ -3,13 +3,13 @@ import useNode from "@/hooks/useNode";
 import usePlayer from "@/hooks/usePlayer";
 import { Attack, Item, WorldNode, WorldEvent, Player, Monster } from "@/types/types";
 import ChooseLocation from "./ChooseLocation";
-import Encounter from "./Encounter";
-import Town from "./Town";
-import NodeEvent from "./NodeEvent";
-import InventoryTab from "./InventoryTab";
-import StatusTab from "./StatusTab";
-import GameOver from "./GameOver";
-import Progress from "./Progress";
+import Encounter from "./nodes/Encounter";
+import Town from "../hooks/Town";
+import NodeEvent from "./nodes/NodeEvent";
+import InventoryTab from "./staticUI/InventoryTab";
+import StatusTab from "./staticUI/StatusTab";
+import GameOver from "./nodes/GameOver";
+import Progress from "./staticUI/Progress";
 
 
 type GameProps = {
@@ -36,7 +36,7 @@ export default function Game({ nodeDict, attackDict, itemDict, eventDict, monste
             <GameOver/>
         )
     }
-    
+
     function locationTypeSwitch(){
         if (!currentNode.complete){
             switch(currentNode.locationType){

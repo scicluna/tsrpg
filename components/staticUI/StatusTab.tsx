@@ -1,5 +1,5 @@
 import { Player } from "@/types/types";
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "./ui/sheet";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "../ui/sheet";
 
 type StatusTabProps = {
     player: Player;

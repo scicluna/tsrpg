@@ -1,4 +1,4 @@
-import { Player, WorldNode } from "@/types/types";
+import { Player } from "@/types/types";
 
 type ProgressProps = {
     player: Player;

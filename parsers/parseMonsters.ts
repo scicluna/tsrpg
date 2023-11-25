@@ -1,8 +1,9 @@
 import { Attack, Item, Monster } from "@/types/types";
 import { parseSection } from "@/utils/parseSection";
+import { randomUUID } from "crypto";
 import fs from "fs/promises";
 
-export async function parseMonsters(tier: number, itemDict: { [key: string]: Item }, attackDict: { [key: string]: Attack }) {
+export async function parseMonsters(tier: number, itemDict: { [key: string]: Item }, attackDict: { [key: string]: Attack }, monsterImageDict: { [key: string]: string }) {
     const monsterDict: { [key: string]: Monster } = {};
 
     const monsterFiles = await fs.readdir(`./vault/t${tier}/monsters`);
@@ -27,6 +28,7 @@ export async function parseMonsters(tier: number, itemDict: { [key: string]: Ite
         const lootSection = parseSection(monsterContent, "Loot");
         const lootItems = lootSection.split("[[").slice(1).map(s => s.split("]]")[0]).map(itemName => itemDict[itemName]);
 
+        const monsterImage = monsterImageDict[monsterName.toLowerCase()];
         // Constructing the monster
         const monster: Monster = {
             name: monsterName,
@@ -40,7 +42,9 @@ export async function parseMonsters(tier: number, itemDict: { [key: string]: Ite
                 loot: lootItems,
                 gold,
                 exp,
-            }
+            },
+            image: monsterImage,
+            id: ''
         };
 
         monsterDict[monsterName] = monster;

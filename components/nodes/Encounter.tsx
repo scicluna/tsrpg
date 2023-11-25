@@ -1,6 +1,7 @@
 import { Attack, Encounter, Monster, Player, Special, Spell, WorldNode } from "@/types/types";
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
+import MonsterCard from "../gameplay/MonsterCard";
 
 type EncounterProps = {
     node: WorldNode;
@@ -105,7 +106,9 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
             </div>
             <div className="grid grid-cols-2 gap-12">
                 {monsters.map((monster, i) => (
-                    <Button onClick={()=>selectTarget(i)} variant={i === target ? "destructive" : "default"} key={`${i}-${monster.name}`}>{monster.name} - {monster.stats.hp}/{monster.stats.maxhp}</Button>
+                    <button onClick={()=>selectTarget(i)} className={`${target === i && 'outline-dashed'}`} key={monster.id}>
+                        <MonsterCard monster={monster}/>    
+                    </button>
                 ))}
                 <div className={`-translate-x-1/2 translate-y-full transition-all absolute top-1/2 left-1/2 z-20`}>
                     <p className="text-2xl font-mono animate-bounce" style={{color: scrollingEffect.color}}>{scrollingEffect.text}</p>
