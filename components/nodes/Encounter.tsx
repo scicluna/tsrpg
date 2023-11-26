@@ -30,6 +30,7 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
         const targetMonster = newMonsters[target]
         const damage = (attack.details.damageBonus + newPlayer.stats.damage - targetMonster.stats.defense) * (attack.details.damageMult)
         targetMonster.stats.hp = Math.max(targetMonster.stats.hp - damage, 0)
+        scrollText("white", `${newPlayer.name} attacked ${targetMonster.name} for ${damage} damage!`)
         
         if (attack.attackType !== "basic"){
             const ability = attack.details as Spell | Special
@@ -39,8 +40,11 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
         }
         
         if (targetMonster.stats.hp <= 0){
-            newMonsters.splice(target, 1)
-            if (target >= newMonsters.length-1){
+            scrollText("red", `${targetMonster.name} was defeated!`)
+            const nextTargetIndex = findNextTarget(target);
+            if (nextTargetIndex !== -1) {
+                setTarget(nextTargetIndex)
+            } else {
                 setTarget(0)
             }
         }
@@ -48,13 +52,25 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
         setMonsters(newMonsters)
         updatePlayer(newPlayer)
 
-        if (newMonsters.length === 0){
+        if (findNextTarget(target) === -1){
             console.log("Encounter Complete")
             node.complete = true
             updateNode(node)
         }
         
         monsterAttack()
+    }
+
+    function findNextTarget(currentIndex: number): number {
+        let nextIndex = currentIndex;
+        do {
+            nextIndex = (nextIndex + 1) % monsters.length; // Loop back to the start if we reach the end
+            if (monsters[nextIndex].stats.hp > 0) {
+                return nextIndex; // Return the index of the next living monster
+            }
+        } while (nextIndex !== currentIndex); // Continue until we loop back to the original target
+    
+        return -1; // Return -1 if all monsters are dead
     }
 
     //monster counter attacks
@@ -64,6 +80,7 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
         const newPlayer = {...player};
     
         for (let i = 0; i < monsters.length; i++) {
+            if (monsters[i].stats.hp <= 0) continue;
             await new Promise(resolve => {
                 setTimeout(() => {
                     const monster = monsters[i];
@@ -106,7 +123,11 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
             </div>
             <div className="grid grid-cols-2 gap-12">
                 {monsters.map((monster, i) => (
-                    <button onClick={()=>selectTarget(i)} className={`${target === i && 'outline-dashed'}`} key={monster.id}>
+                    <button onClick={()=>{
+                        if (monster.stats.hp > 0){
+                            selectTarget(i)
+                        }
+                    }} className={`${target === i && 'outline-dashed'} ${monster.stats.hp === 0 && 'opacity-0'}`} key={monster.id}>
                         <MonsterCard monster={monster}/>    
                     </button>
                 ))}
@@ -115,5 +136,6 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
                 </div>
             </div>
         </main>
+
     )
 }

@@ -57,7 +57,6 @@ function parseEffects(effectLines: string[], itemDict: { [key: string]: Item }, 
 
         if (line.includes("=")) {
             const [key, value] = line.split("=").map(s => s.trim().replace("- ", ""));
-            console.log(key, value)
             if (key.startsWith('items') || key.startsWith('monsters')){
                 const refs = value.split("[[").slice(1).map(s => s.split("]]")[0]);
                 for (let ref of refs) {
