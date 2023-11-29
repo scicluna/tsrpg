@@ -49,10 +49,10 @@ export default function InventoryTab({player, updatePlayer}: InventoryTabProps){
         <SheetTrigger className="absolute top-6 right-6 text-lg font-semibold text-stone-950 dark:text-stone-50 hover:animate-pulse">Inventory</SheetTrigger>
         <SheetContent>
             <SheetHeader>
-            <SheetTitle>Inventory</SheetTitle>
-                {player.stats.inventory.map((item, i) => (
-                    <SheetDescription key={i} className="hover:animate-pulse cursor-pointer" onClick={()=>{useItem(item.details)}}>{item.details.name}</SheetDescription>
-                ))}
+                <SheetTitle>Inventory</SheetTitle>
+                    {player.stats.inventory.map((item, i) => (
+                        <SheetDescription key={i} className="hover:animate-pulse cursor-pointer" onClick={()=>{useItem(item.details)}}>{item.details.name}</SheetDescription>
+                    ))}
             </SheetHeader>
         </SheetContent>
     </Sheet>
