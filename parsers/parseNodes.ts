@@ -1,11 +1,10 @@
 import fs from 'fs/promises'
-import { Encounter, Town, WorldEvent, WorldNode } from "@/types/types";
+import { Encounter, WorldEvent, WorldNode } from "@/types/types";
 import { connectNodes } from './connectNodes';
 
 export async function parseNodes(
     tier: number, eventDict: { [key: string]: WorldEvent } = {},
     encounterDict: { [key: string]: Encounter } = {},
-    townDict: { [key: string]: Town } = {}
     ) {
 
     const nodesDict: { [key: string]: WorldNode } = {};
@@ -23,10 +22,6 @@ export async function parseNodes(
         switch (locationType){
             case "Encounter":{
                 location = encounterDict[locationEvent];
-                break;
-            }
-            case "Town":{
-                location = townDict[locationEvent];
                 break;
             }
             case "Event":{

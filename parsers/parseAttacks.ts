@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { Attack, Basic, Spell, Special, AttackType } from '@/types/types';
+import { Attack, Basic, Spell, Special, AttackType, StatusEffect, StatusEffectTypes } from '@/types/types';
 
 export async function parseAttacks(tier: number){
     const attackDict: { [key: string]: Attack } = {};
@@ -23,52 +23,39 @@ export async function parseAttacks(tier: number){
                     damageMult : basicDamageMult,
                 };
                 break;
-            case "Special":
-                const specialDamageBonus = parseInt(attackContent.split("## Damage Bonus:")[1].split("##")[0].trim());
-                const specialDamageMult = parseFloat(attackContent.split("## Damage Multiplier:")[1].split("##")[0].trim());
-                const specialMultiTarget = attackContent.split("## Multi-Target:")[1].split("##")[0].trim().toLowerCase() === "true"
-                const specialCost = parseInt(attackContent.split("## MP Cost:")[1].split("##")[0].trim());
-
-                const statusDict: { [key: string]: string } = {};
-                const specialStatusSection = attackContent.split("## Status:")[1].split("\n");
-                for (const statusLine of specialStatusSection) {
-                    const [statusName, statusValue] = statusLine.split("=").map(part => part.trim());
-                    if (statusName && statusValue) {
-                        statusDict[statusName] = statusValue;
-                    }
-                }
-
-                attackDetails = {
-                    damageBonus : specialDamageBonus,
-                    damageMult : specialDamageMult,
-                    mpCost: specialCost,
-                    multiTarget : specialMultiTarget,
-                    status : statusDict,
-                };
-                break;
-            case "Spell":
-                const spellDamageBonus = parseInt(attackContent.split("## Damage Bonus:")[1].split("##")[0].trim());
-                const spellDamageMult = parseFloat(attackContent.split("## Damage Multiplier:")[1].split("##")[0].trim());
-                const spellMultiTarget = attackContent.split("## Multi-Target:")[1].split("##")[0].trim().toLowerCase() === "true"
-                const spellCost = parseInt(attackContent.split("## MP Cost:")[1].split("##")[0].trim());
-
-                const spellStatusDict: { [key: string]: string } = {};
-                const spellStatusSection = attackContent.split("## Status:")[1].split("\n");
-                for (const statusLine of spellStatusSection) {
-                    const [statusName, statusValue] = statusLine.split("=").map(part => part.trim());
-                    if (statusName && statusValue) {
-                        spellStatusDict[statusName] = statusValue;
-                    }
-                }
+                case "Special":
+                case "Spell":
+                    // Common parsing logic for Special and Spell
+                    const damageBonus = parseInt(attackContent.split("## Damage Bonus:")[1].split("##")[0].trim());
+                    const damageMult = parseFloat(attackContent.split("## Damage Multiplier:")[1].split("##")[0].trim());
+                    const multiTarget = attackContent.split("## Multi-Target:")[1].split("##")[0].trim().toLowerCase() === "true";
+                    const mpCost = parseInt(attackContent.split("## MP Cost:")[1].split("##")[0].trim());
                 
-                attackDetails = {
-                    damageBonus : spellDamageBonus,
-                    damageMult : spellDamageMult,
-                    mpCost: spellCost,
-                    multiTarget : spellMultiTarget,
-                    status : spellStatusDict,
-                };
-                break;
+                    // New status effect parsing
+                    const statusSection = attackContent.split("## Status:")[1].split("\n");
+                    let statusEffect: StatusEffect = { type: 'poison', intensity: 0, duration: 0 };
+
+                    for (const line of statusSection) {
+                        const trimmedLine = line.trim();
+                        if (trimmedLine) {
+                            if (trimmedLine.includes("=")) {
+                                const [key, value] = trimmedLine.split("=").map(part => part.trim());
+                                if (key === 'intensity' || key === 'duration') {
+                                    statusEffect[key] = parseInt(value);
+                                }
+                            } else {
+                                statusEffect.type = trimmedLine as StatusEffectTypes; // aka, no = means its the type
+                            }
+                        }
+                    }
+                    attackDetails = {
+                        damageBonus,
+                        damageMult,
+                        mpCost,
+                        multiTarget,
+                        status: statusEffect, // Add the parsed status effect
+                    }  as Spell|Special;
+                    break;
             }
         const attack: Attack = {
             name: attackName,

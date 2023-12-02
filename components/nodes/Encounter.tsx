@@ -2,19 +2,21 @@ import { Attack, Encounter, Monster, Player, Special, Spell, WorldNode } from "@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import MonsterCard from "../gameplay/MonsterCard";
+import { processStatusEffects } from "@/utils/processStatusEffects";
+import { applyStatus } from "@/utils/applyStatus";
 
 type EncounterProps = {
     node: WorldNode;
     player: Player;
     updatePlayer: (any:any) => void;
     updateNode: (any:any) => void;
+    updateScrollingText: (color: string, text: string) => void;
 }
 
-export default function Encounter({node, player, updatePlayer, updateNode}: EncounterProps){
+export default function Encounter({node, player, updatePlayer, updateNode, updateScrollingText}: EncounterProps){
     const location = node.location as Encounter
     const [monsters, setMonsters] = useState<Monster[]>(location.enemies);
     const [target, setTarget] = useState<number>(0)
-    const [scrollingEffect, setScrollingEffect] = useState<{color: string, text: string}>({color: "", text: ""});
     const [waiting, setWaiting] = useState<boolean>(false);
     
     function selectTarget(i: number){
@@ -27,20 +29,24 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
     function attackTarget(attack: Attack){
         const newMonsters = [...monsters]
         const newPlayer = {...player}
+        processStatusEffects(newPlayer, updateScrollingText);
         const targetMonster = newMonsters[target]
         const damage = (attack.details.damageBonus + newPlayer.stats.damage - targetMonster.stats.defense) * (attack.details.damageMult)
         targetMonster.stats.hp = Math.max(targetMonster.stats.hp - damage, 0)
-        scrollText("white", `${newPlayer.name} attacked ${targetMonster.name} for ${damage} damage!`)
+        updateScrollingText("white", `${newPlayer.name} attacked ${targetMonster.name} for ${damage} damage!`)
         
-        if (attack.attackType !== "basic"){
+        if (attack.name !== "basic"){
             const ability = attack.details as Spell | Special
             if (ability.mpCost){
                 newPlayer.stats.mp = Math.max(newPlayer.stats.mp - ability.mpCost, 0)
             }
+            if (ability.status) {
+                applyStatus(targetMonster, ability.status);
+            }
         }
         
         if (targetMonster.stats.hp <= 0){
-            scrollText("red", `${targetMonster.name} was defeated!`)
+            updateScrollingText("red", `${targetMonster.name} was defeated!`)
             const nextTargetIndex = findNextTarget(target);
             if (nextTargetIndex !== -1) {
                 setTarget(nextTargetIndex)
@@ -54,6 +60,21 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
 
         if (findNextTarget(target) === -1){
             console.log("Encounter Complete")
+            
+            monsters.forEach(monster => {
+                const drops = monster.stats.loot
+                drops.forEach(drop => {
+                    const existingItem = newPlayer.stats.inventory.find(i => i.details.name === drop.name);
+                    if (existingItem) {
+                        // Item exists, update quantity
+                        existingItem.quantity += 1;
+                    } else {
+                        // New item, add to inventory
+                        newPlayer.stats.inventory.push({ details: drop, quantity: 1 });
+                    }
+                })
+            })
+            updatePlayer(newPlayer)
             node.complete = true
             updateNode(node)
         }
@@ -76,6 +97,9 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
     //monster counter attacks
     //handle status effects somehow
     async function monsterAttack() {
+        monsters.forEach(monster => {
+            processStatusEffects(monster, updateScrollingText);
+        })
         setWaiting(true);
         const newPlayer = {...player};
     
@@ -87,8 +111,15 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
                     const attack = monster.stats.attacks[Math.floor(Math.random() * monster.stats.attacks.length)];
                     const damage = (attack.details.damageBonus + monster.stats.damage - newPlayer.stats.defense) * (attack.details.damageMult);
                     newPlayer.stats.hp = Math.max(newPlayer.stats.hp - damage, 0);
+
+                    if (attack.name !== "basic"){
+                        const ability = attack.details as Spell | Special
+                        if (ability.status) {
+                            applyStatus(newPlayer, ability.status);
+                        }
+                    }
     
-                    scrollText("red", `${monster.name} attacked ${newPlayer.name} for ${damage} damage!`)
+                    updateScrollingText("red", `${monster.name} attacked ${newPlayer.name} for ${damage} damage!`)
                     // Update the player after each attack
                     updatePlayer({...newPlayer});
     
@@ -99,13 +130,6 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
         }
     
         setWaiting(false);
-    }
-
-    function scrollText(color: string, text: string){
-        setScrollingEffect({color: color, text: text})
-        setTimeout(() => {
-            setScrollingEffect({color: "", text: ""})
-        }, 600)
     }
 
     return (
@@ -131,9 +155,6 @@ export default function Encounter({node, player, updatePlayer, updateNode}: Enco
                         <MonsterCard monster={monster}/>    
                     </button>
                 ))}
-                <div className={`-translate-x-1/2 translate-y-full transition-all absolute top-1/2 left-1/2 z-20`}>
-                    <p className="text-2xl font-mono animate-bounce" style={{color: scrollingEffect.color}}>{scrollingEffect.text}</p>
-                </div>
             </div>
         </main>
 

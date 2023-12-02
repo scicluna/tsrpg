@@ -51,7 +51,7 @@ export default function InventoryTab({player, updatePlayer}: InventoryTabProps){
             <SheetHeader>
                 <SheetTitle>Inventory</SheetTitle>
                     {player.stats.inventory.map((item, i) => (
-                        <SheetDescription key={i} className="hover:animate-pulse cursor-pointer" onClick={()=>{useItem(item.details)}}>{item.details.name}</SheetDescription>
+                        <SheetDescription key={i} className="hover:animate-pulse cursor-pointer" onClick={()=>{useItem(item.details)}}>{item.quantity}x {item.details.name}</SheetDescription>
                     ))}
             </SheetHeader>
         </SheetContent>

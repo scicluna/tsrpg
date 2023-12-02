@@ -2,7 +2,7 @@
 
 import { EffectTypes, Encounter, Item, Monster, Player, SimpleEffectTypes, WorldEvent, WorldEventChoice, WorldNode } from "@/types/types"
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useScrollingText } from "@/hooks/useScrollingText";
 
 type NodeEventProps = {
     node: WorldNode;
@@ -11,6 +11,8 @@ type NodeEventProps = {
     updateNode: (any:any) => void;
     eventDict: {[key: string]: WorldEvent};
     monsterDict: {[key: string]: Monster};
+    setLeavingTown: (any:any) => void;
+    updateScrollingText: (color: string, text: string) => void;
 }
 
 type EffectValue = number | string | Monster[] | Item[]
@@ -19,21 +21,28 @@ type Effects = {
     [key in EffectTypes]: EffectValue;
 };
 
-export default function NodeEvent({node, player, updatePlayer, updateNode, eventDict, monsterDict}: NodeEventProps){
+export default function NodeEvent({node, player, updatePlayer, updateNode, eventDict, monsterDict, setLeavingTown, updateScrollingText}: NodeEventProps){
     const location = node.location as WorldEvent
-    const [scrollingEffect, setScrollingEffect] = useState<{color: string, text: string}>({color: "", text: ""});
 
     function chooseOption(choice: WorldEventChoice){
         const newPlayer = {...player}
         const effects = choice.outcome.effects as Effects[];
-        let stayFlag = false;
+        let complete = true;
         effects.forEach((effect) => {
             const [effectKey, effectValue] = Object.entries(effect).flat(1)
             if (effectKey === "items" || effectKey === "attacks"){
                 const itemList = effectValue as Item[];
                 itemList.forEach(item => {
-                    newPlayer.stats.inventory.push({details: item, quantity: 1})
-                })
+                    // Check if the item already exists in the inventory
+                    const existingItem = newPlayer.stats.inventory.find(i => i.details.name === item.name);
+                    if (existingItem) {
+                        // Item exists, update quantity
+                        existingItem.quantity += 1;
+                    } else {
+                        // New item, add to inventory
+                        newPlayer.stats.inventory.push({ details: item, quantity: 1 });
+                    }
+                });
                 updateScrollingText('white', `Obtained Items: ${itemList.map(item => item.name).join(", ")}`)
             } 
             else if (effectKey === "monsters"){
@@ -45,13 +54,16 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
                 };
                 node.location = encounter;
                 node.locationType = "Encounter";
-                stayFlag = true;
+                complete = false;
             } 
             else if (effectKey === "event"){
                 const eventName = effectValue as string;
                 const event: WorldEvent = eventDict[eventName];
                 node.location = event;
-                stayFlag = true;
+                complete = false;
+            } else if (effectKey === "exit"){
+                setLeavingTown(true)
+                complete = false;
             }
             else {
                 //ewww
@@ -69,18 +81,12 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
                 updateScrollingText(effectColor, `Obtained ${effectKey as string}: ${effectValue as string}`)
             }
         })
+        
         updatePlayer(newPlayer)
-        if (!stayFlag){
+        if (complete){
             node.complete = true
         }
         updateNode(node)
-    }
-
-    function updateScrollingText(color: string, text: string){
-        setScrollingEffect({color: color, text: text})
-        setTimeout(() => {
-            setScrollingEffect({color: "", text: ""})
-        }, 600)
     }
 
     return (
@@ -92,9 +98,6 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
                 {location.choices.map((choice) => (
                     <Button key={choice.description} onClick={()=>chooseOption(choice)}>{choice.description}</Button>
                 ))}
-                <div className={`-translate-x-1/2 -translate-y-1/2 transition-all absolute top-1/2 left-1/2 z-20`}>
-                    <p className="text-2xl font-mono animate-bounce" style={{color: scrollingEffect.color}}>{scrollingEffect.text}</p>
-                </div>
             </div>
         </main>
     )

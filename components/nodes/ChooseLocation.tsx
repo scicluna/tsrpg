@@ -1,17 +1,19 @@
 import { ConnectedNode, Player, WorldNode } from "@/types/types";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 type ChooseLocationProps = {
     node: WorldNode;
     player: Player;
     updatePlayer: (player:Player) => void;
     moveToNode: (nodeName:string) => void;
+    setLeavingtown: (any:any) => void;
 }
 
-export default function ChooseLocation({node, player, moveToNode, updatePlayer}: ChooseLocationProps){
+export default function ChooseLocation({node, player, moveToNode, updatePlayer, setLeavingtown}: ChooseLocationProps){
     
     //optional, possible i want more logic here
     function chooseLocation(nodeToConnect: ConnectedNode){
+        setLeavingtown(false)
         moveToNode(nodeToConnect.nodeName)
         updatePlayer({...player , location: nodeToConnect.nodeName, stats: {...player.stats, days: player.stats.days+nodeToConnect.distance}})
     }

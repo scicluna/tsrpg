@@ -59,6 +59,7 @@ type Monster = {
         gold: number;
         exp: number;
         attacks: Attack[];
+        status: StatusEffect[]; // Array of status effects
     }
     image: string;
     id: string;
@@ -85,6 +86,7 @@ type Player = {
             accessory: Item | null;
         }
         days: number;
+        status: StatusEffect[]; // Array of status effects
     }
 }
 
@@ -101,6 +103,15 @@ type Item = {
 }
 
 type ItemType = "weapon" | "armor" | "consumable" | "misc";
+
+type StatusEffect = {
+    type: StatusEffectTypes;
+    duration: number;
+    intensity?: number;
+    originalValue?: number; // Store the original value of the stat here
+}
+
+type StatusEffectTypes = 'poison' | 'burn' | 'cursed' | 'regen';
 
 type Attack = {
     name: string;
@@ -121,9 +132,7 @@ type Spell = {
     damageMult: number;
     mpCost: number;
     multiTarget: boolean;
-    status: {
-        [key: string] : string;
-    }
+    status?: StatusEffect
 }
 
 type Special = {
@@ -131,9 +140,7 @@ type Special = {
     damageMult: number;
     mpCost: number;
     multiTarget: boolean;
-    status: {
-        [key: string] : string;
-    }
+    status?: StatusEffect
 }
 
 // Path: types/types.d.ts

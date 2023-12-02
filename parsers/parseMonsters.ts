@@ -42,6 +42,7 @@ export async function parseMonsters(tier: number, itemDict: { [key: string]: Ite
                 loot: lootItems,
                 gold,
                 exp,
+                status: [],
             },
             image: monsterImage,
             id: ''

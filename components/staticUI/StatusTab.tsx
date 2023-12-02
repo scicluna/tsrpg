@@ -19,6 +19,9 @@ export default function StatusTab({player, updatePlayer}: StatusTabProps){
                 <SheetDescription>Defense: {player.stats.defense}</SheetDescription>
                 <SheetDescription>Level: {player.stats.level}</SheetDescription>
                 <SheetDescription>Experience: {player.stats.exp}/{player.stats.level * 10}</SheetDescription>
+                <SheetDescription>Status: {player.stats.status.map(
+                    status => status.type
+                )}</SheetDescription>
             </SheetHeader>
         </SheetContent>
     </Sheet>

@@ -3,7 +3,6 @@ import { parseEvents } from "./parseEvents";
 import { parseItems } from "./parseItems";
 import { parseMonsters } from "./parseMonsters";
 import { parseNodes } from "./parseNodes";
-import { parseTowns } from "./parseTowns";
 import { parseAttacks } from "./parseAttacks";
 import { parseMonsterImages } from "./parseMonsterImages";
 
@@ -18,8 +17,7 @@ export async function parseWorld(tier: number) {
     const monsterDict = await parseMonsters(tier, itemDict, attackDict, monsterImageDict);
     const encounterDict = await parseEncounters(tier, monsterDict);
     const eventDict = await parseEvents(tier, itemDict, monsterDict);
-    const townDict = await parseTowns(tier, eventDict);
-    const nodeDict = await parseNodes(tier, eventDict, encounterDict, townDict);
+    const nodeDict = await parseNodes(tier, eventDict, encounterDict);
     
     return {nodeDict, attackDict, itemDict, eventDict, monsterDict};
 }

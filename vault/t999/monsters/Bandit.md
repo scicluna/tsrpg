@@ -9,6 +9,7 @@
 
 ## Attacks:
 [[basic]]
+[[poison stab]]
 
 ## Loot:
 [[potion]]

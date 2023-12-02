@@ -17,7 +17,7 @@ export async function loadUser(attackDict: { [key: string]: Attack}, itemDict: {
             exp: 0,
             level: 1,
             gold: 0,
-            inventory: [{quantity: 1, details: itemDict["potion"]}],
+            inventory: [{quantity: 2, details: itemDict["potion"]}],
             attacks: [attackDict["basic"]],
             equipped: {
                 weapon: null,
@@ -25,6 +25,7 @@ export async function loadUser(attackDict: { [key: string]: Attack}, itemDict: {
                 accessory: null,
             },
             days: 0,
+            status: []
         }
     }
 
