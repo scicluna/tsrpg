@@ -78,7 +78,7 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
                 } else if (effectKey === "gold"){
                     effectColor = 'yellow'
                 }
-                updateScrollingText(effectColor, `Obtained ${effectKey as string}: ${effectValue as string}`)
+                updateScrollingText(effectColor, `${effectKey as string}: ${effectValue as string}`)
             }
         })
         

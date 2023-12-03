@@ -43,6 +43,7 @@ export async function parseEvents(tier: number, itemDict: { [key: string]: Item 
         eventDict[eventName] = worldEvent;
     }
 
+    console.log(eventDict)
     return eventDict;
 }
 

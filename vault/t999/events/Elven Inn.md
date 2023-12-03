@@ -1,14 +1,27 @@
 ## Description:
-WEIRD FUCKING INN BRO
+(Description...)
 
 ## Choices:
-Description: Offer a magical item.
-- Outcome: Gain the altar's blessing.
-- hp = +5
+Description: (Description...)
+- Outcome: (Description)
+- (argument_name = x)
+- (argument_name = x)
+- (etc..)
 
-Description: Recite the runes.
-- Outcome: Unleash a spirit.
-- hp = -2
+Description: (Description...)
+- Outcome: (Description)
+- (argument_name = x)
+- (argument_name = x)
+- (etc..)
 
-Description: Leave the altar alone.
-- Outcome: Nothing happens.
+Description: (Description...)
+- Outcome: (Description)
+- (argument_name = x)
+- (argument_name = x)
+- (etc..)
+
+Description: (Description...)
+- Outcome: (Description)
+- (argument_name = x)
+- (argument_name = x)
+- (etc..)

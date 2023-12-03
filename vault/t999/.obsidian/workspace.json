@@ -1,52 +1,35 @@
 {
   "main": {
-    "id": "6ef0db4eda19ee9e",
+    "id": "fc08b439646e7a5b",
     "type": "split",
     "children": [
       {
-        "id": "7c9253243cb6f23a",
+        "id": "8312774682c370a1",
         "type": "tabs",
         "children": [
           {
-            "id": "464974d3d7c94135",
+            "id": "afdc13e68a4a3cec",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "templates/Item_Template (itemname).md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "53b02317b1e22fb2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "t9991/monsters/Bandit.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "f8af6f51a4465f7c",
+    "id": "2a515b8f4d6d07f5",
     "type": "split",
     "children": [
       {
-        "id": "a67081c2c9fb9f45",
+        "id": "d9773598238cf73a",
         "type": "tabs",
         "children": [
           {
-            "id": "516f3ca19ca1aa6e",
+            "id": "9b27f6cb7af7d6f9",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -56,7 +39,7 @@
             }
           },
           {
-            "id": "b43423a03ae7fa39",
+            "id": "b53b43d3f319c17c",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -71,7 +54,7 @@
             }
           },
           {
-            "id": "56708f14aa4991b0",
+            "id": "322582b113ad34bd",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -85,20 +68,19 @@
     "width": 300
   },
   "right": {
-    "id": "bdb6071b431b84ea",
+    "id": "d57a7d4d8d603109",
     "type": "split",
     "children": [
       {
-        "id": "daf4049c840fc39f",
+        "id": "56ca825a659794d5",
         "type": "tabs",
         "children": [
           {
-            "id": "634785cfebe25236",
+            "id": "6f3fefcc379f6440",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "t9991/monsters/Bandit.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -110,19 +92,18 @@
             }
           },
           {
-            "id": "e140626a85421c79",
+            "id": "76bb220887ef953a",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "t9991/monsters/Bandit.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
             }
           },
           {
-            "id": "8aa666673c889cc3",
+            "id": "2d08f3a41fca9428",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -133,13 +114,11 @@
             }
           },
           {
-            "id": "0cfbcadf98ccaa69",
+            "id": "271782f6ea0f7759",
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "t9991/monsters/Bandit.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -159,43 +138,6 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "53b02317b1e22fb2",
-  "lastOpenFiles": [
-    "t9991/attacks/poison stab.md",
-    "t9991/monsters/Bandit.md",
-    "t9991/attacks/basic.md",
-    "t999/attacks/poison stab.md",
-    "templates/Event_Template (eventname).md",
-    "t9991/encounters/Thieves' Ambush.md",
-    "t9991/encounters/River Serpents Ambush.md",
-    "t999/nodes/5. Shadowed Path.md",
-    "t999/nodes/4. Sunlit Clearing.md",
-    "t999/nodes/3. Whispering Grove.md",
-    "t999/nodes/2. Glimmering River.md",
-    "t999/nodes/1. The Wandering Hills.md",
-    "t999/nodes",
-    "t999/monsters/Shadow Stalker.md",
-    "t999/monsters/Serpent of the Depths.md",
-    "t999/monsters/River Scalehunter.md",
-    "t999/monsters/Bandit.md",
-    "t999/monsters",
-    "t999/items/potion.md",
-    "t999/items",
-    "t999/events/The Mysterious Fog.md",
-    "t999/events/Other Location.md",
-    "t999/events/Night of Tales.md",
-    "t999/events/Elven Outpost.md",
-    "t999/events/Elven Inn.md",
-    "t999/events/Ancient Altar Ritual.md",
-    "t999/events",
-    "t999/encounters/Thieves' Ambush.md",
-    "t999/encounters/River Serpents Ambush.md",
-    "t999/encounters",
-    "t999/attacks/firebolt.md",
-    "t999/attacks",
-    "t9991/nodes",
-    "t9991/monsters",
-    "t9991/items",
-    "t9991/events"
-  ]
+  "active": "afdc13e68a4a3cec",
+  "lastOpenFiles": []
 }

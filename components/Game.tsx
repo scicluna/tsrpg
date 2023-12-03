@@ -66,7 +66,7 @@ export default function Game({ nodeDict, attackDict, itemDict, eventDict, monste
     }
 
     return (
-        <main>
+        <main className="relative h-full w-full">
             <Progress player={playerState}/>
             {locationTypeSwitch()}
             <StatusTab player={playerState} updatePlayer={updatePlayer}/>
