@@ -136,13 +136,14 @@ export default function Encounter({node, player, updatePlayer, updateNode, updat
     function endEncounter(newPlayer: Player){
         //handles the end of the encounter
         setTarget(0) //reset for next encounter
-        console.log("Encounter Complete")
-        dropLoot(monsters, newPlayer)
-        updatePlayer(newPlayer)
+        console.log("Encounter Complete");
+        dropLoot(monsters, newPlayer);
+        gainExp(monsters, newPlayer);
+        updatePlayer(newPlayer);
 
         //set node to complete signaling the end of the encounter
-        node.complete = true
-        updateNode(node)
+        node.complete = true;
+        updateNode(node);
     }
 
     function dropLoot(monsters:Monster[], player:Player){
@@ -159,6 +160,17 @@ export default function Encounter({node, player, updatePlayer, updateNode, updat
                 }
             });
         });
+    }
+
+    function gainExp(monsters:Monster[], player:Player){
+        monsters.forEach(monster => {
+            player.stats.exp += monster.stats.exp
+        });
+        if (player.stats.exp >= player.stats.level * 10){
+            player.stats.exp -= player.stats.level * 10
+            player.stats.level += 1
+            //handle level up status changes
+        }
     }
 
     return (

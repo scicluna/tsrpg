@@ -120,7 +120,10 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
     }
     
     function handleSimpleEffect(effect: SimpleEffectTypes, effectAmount: number, player: Player){
+        //apply effect
         player.stats[effect] += effectAmount
+
+        //update scrolling text
         let effectColor = 'white'
         switch (effect){
             case "hp":
