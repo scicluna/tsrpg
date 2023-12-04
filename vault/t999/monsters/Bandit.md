@@ -9,7 +9,7 @@
 
 ## Attacks:
 [[basic]]
-[[t999/attacks/poison stab]]
+[[poison stab]]
 
 ## Loot:
 [[potion]]
