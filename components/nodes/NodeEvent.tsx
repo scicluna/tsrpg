@@ -8,7 +8,6 @@ type NodeEventProps = {
     player: Player;
     updatePlayer: (any:any) => void;
     updateNode: (any:any) => void;
-
     eventDict: {[key: string]: WorldEvent};
     monsterDict: {[key: string]: Monster};
     setLeavingTown: (any:any) => void;
@@ -30,11 +29,18 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
         
         //handle effects to be applied to the player
         const effects = choice.outcome.effects as Effects[];
+
         effects.forEach(effect => {
             //extract the key and value from the effect
             const [effectKey, effectValue] = Object.entries(effect).flat(1)
 
             switch(effectKey){
+                //handle town/dungeon exits
+                case "exit":
+                    complete = false;
+                    setLeavingTown(true)
+                    break;
+
                 //handle item events
                 case "items":
                     const itemList = effectValue as Item[];
@@ -45,13 +51,13 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
                 //handle event triggered encounters
                 case "monsters":
                     const monsters = effectValue as Monster[];
-                    handleEncounter(monsters, newPlayer);
+                    handleEncounter(monsters);
                     break;
             
                 //handle event chains
                 case "event":
                     const eventName = effectValue as string;
-                    handleChainEvent(eventName, newPlayer);
+                    handleChainEvent(eventName);
                     break;
 
                 //handle simple effects
@@ -67,6 +73,7 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
 
         //check for node completion
         if (complete){
+            console.log("node is complete")
             node.complete = true
         }
 
@@ -88,7 +95,7 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
         });
     }
 
-    function handleEncounter(monsters: Monster[], player: Player){
+    function handleEncounter(monsters: Monster[]){
         //build a new encounter
         const encounter: Encounter = {
             name: "Event Encounter",
@@ -105,16 +112,11 @@ export default function NodeEvent({node, player, updatePlayer, updateNode, event
         complete = false;
     }
 
-    function handleChainEvent(eventName: string, player: Player){
+    function handleChainEvent(eventName: string){
         //set the event as the new location using the eventDict
         const event: WorldEvent = eventDict[eventName];
         node.location = event;
         complete = false;
-
-        //handle the ability to return to the event later
-        if (eventName === "exit"){
-            setLeavingTown(true)
-        }
     }
     
     function handleSimpleEffect(effect: SimpleEffectTypes, effectAmount: number, player: Player){

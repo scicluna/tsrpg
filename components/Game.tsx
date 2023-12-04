@@ -28,6 +28,8 @@ export default function Game({ nodeDict, attackDict, itemDict, eventDict, monste
     const [leavingTown, setLeavingTown] = useState(false)
     const [FloatingText, updateScrollingText] = useScrollingText();
 
+    console.log(currentNode)
+
     if (playerState.stats.hp <= 0){
         return (
             <GameOver/>
