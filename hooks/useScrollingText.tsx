@@ -8,7 +8,7 @@ type Message = {
     text: string;
 };
 
-export function useScrollingText(defaultDuration = 600): UseScrollingTextReturn {
+export function useScrollingText(defaultDuration = 900): UseScrollingTextReturn {
     const [messages, setMessages] = useState<Message[]>([]);
 
     function updateScrollingText(color: string, text: string, duration: number = defaultDuration) {

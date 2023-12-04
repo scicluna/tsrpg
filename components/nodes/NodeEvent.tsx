@@ -2,13 +2,13 @@
 
 import { EffectTypes, Encounter, Item, Monster, Player, SimpleEffectTypes, WorldEvent, WorldEventChoice, WorldNode } from "@/types/types"
 import { Button } from "../ui/button";
-import { useScrollingText } from "@/hooks/useScrollingText";
 
 type NodeEventProps = {
     node: WorldNode;
     player: Player;
     updatePlayer: (any:any) => void;
     updateNode: (any:any) => void;
+
     eventDict: {[key: string]: WorldEvent};
     monsterDict: {[key: string]: Monster};
     setLeavingTown: (any:any) => void;
@@ -23,70 +23,118 @@ type Effects = {
 
 export default function NodeEvent({node, player, updatePlayer, updateNode, eventDict, monsterDict, setLeavingTown, updateScrollingText}: NodeEventProps){
     const location = node.location as WorldEvent
+    let complete = true;
 
     function chooseOption(choice: WorldEventChoice){
         const newPlayer = {...player}
+        
+        //handle effects to be applied to the player
         const effects = choice.outcome.effects as Effects[];
-        let complete = true;
-        effects.forEach((effect) => {
+        effects.forEach(effect => {
+            //extract the key and value from the effect
             const [effectKey, effectValue] = Object.entries(effect).flat(1)
-            if (effectKey === "items" || effectKey === "attacks"){
-                const itemList = effectValue as Item[];
-                itemList.forEach(item => {
-                    // Check if the item already exists in the inventory
-                    const existingItem = newPlayer.stats.inventory.find(i => i.details.name === item.name);
-                    if (existingItem) {
-                        // Item exists, update quantity
-                        existingItem.quantity += 1;
-                    } else {
-                        // New item, add to inventory
-                        newPlayer.stats.inventory.push({ details: item, quantity: 1 });
-                    }
-                });
-                updateScrollingText('white', `Obtained Items: ${itemList.map(item => item.name).join(", ")}`)
-            } 
-            else if (effectKey === "monsters"){
-                const monsters = effectValue as Monster[]
-                const encounter: Encounter = {
-                    name: "Event Encounter",
-                    description: "A sudden challenge appears!",
-                    enemies: monsters
-                };
-                node.location = encounter;
-                node.locationType = "Encounter";
-                complete = false;
-            } 
-            else if (effectKey === "event"){
-                const eventName = effectValue as string;
-                const event: WorldEvent = eventDict[eventName];
-                node.location = event;
-                complete = false;
-            } else if (effectKey === "exit"){
-                setLeavingTown(true)
-                complete = false;
-            }
-            else {
-                //ewww
-                newPlayer.stats[effectKey as SimpleEffectTypes] += parseInt(effectValue as string)
-                let effectColor = 'white'
-                if (effectKey === "hp"){
-                    effectColor = 'red'
-                } else if (effectKey === "mp"){
-                    effectColor = 'blue'
-                } else if (effectKey === "xp"){
-                    effectColor = 'green'
-                } else if (effectKey === "gold"){
-                    effectColor = 'yellow'
-                }
-                updateScrollingText(effectColor, `${effectKey as string}: ${effectValue as string}`)
+
+            switch(effectKey){
+                //handle item events
+                case "items":
+                    const itemList = effectValue as Item[];
+                    handleItems(itemList, newPlayer);
+                    updateScrollingText('white', `Obtained Items: ${itemList.map(item => item.name).join(", ")}`);
+                    break;
+                
+                //handle event triggered encounters
+                case "monsters":
+                    const monsters = effectValue as Monster[];
+                    handleEncounter(monsters, newPlayer);
+                    break;
+            
+                //handle event chains
+                case "event":
+                    const eventName = effectValue as string;
+                    handleChainEvent(eventName, newPlayer);
+                    break;
+
+                //handle simple effects
+                default:
+                    const effect = effectKey as SimpleEffectTypes;
+                    const effectAmount = parseInt(effectValue as string);
+                    handleSimpleEffect(effect, effectAmount, newPlayer);
+                    break;
             }
         })
-        
+        //update player state
         updatePlayer(newPlayer)
+
+        //check for node completion
         if (complete){
             node.complete = true
         }
+
+        //update node state
         updateNode(node)
+    }
+
+    function handleItems(items: Item[], player: Player){
+        items.forEach(item => {
+            // Check if the item already exists in the inventory
+            const existingItem = player.stats.inventory.find(i => i.details.name === item.name);
+            if (existingItem) {
+                // Item exists, update quantity
+                existingItem.quantity += 1;
+            } else {
+                // New item, add to inventory
+                player.stats.inventory.push({ details: item, quantity: 1 });
+            }
+        });
+    }
+
+    function handleEncounter(monsters: Monster[], player: Player){
+        //build a new encounter
+        const encounter: Encounter = {
+            name: "Event Encounter",
+            description: "A sudden challenge appears!",
+            enemies: monsters
+        };
+        //set the encounter as the new location
+        node.location = encounter;
+        node.locationType = "Encounter";
+
+        updateScrollingText("red", `A sudden challenge appears!`)
+
+        //set the encounter as incomplete as to not trigger the end of the event
+        complete = false;
+    }
+
+    function handleChainEvent(eventName: string, player: Player){
+        //set the event as the new location using the eventDict
+        const event: WorldEvent = eventDict[eventName];
+        node.location = event;
+        complete = false;
+
+        //handle the ability to return to the event later
+        if (eventName === "exit"){
+            setLeavingTown(true)
+        }
+    }
+    
+    function handleSimpleEffect(effect: SimpleEffectTypes, effectAmount: number, player: Player){
+        player.stats[effect] += effectAmount
+        let effectColor = 'white'
+        switch (effect){
+            case "hp":
+                effectColor = 'red'
+                break;
+            case "mp":
+                effectColor = 'blue'
+                break;
+            case "exp":
+                effectColor = 'green'
+                break;
+            case "gold":
+                effectColor = 'yellow'
+                break;
+        }
+        updateScrollingText(effectColor, `${effect as string}: ${effectAmount}`)
     }
 
     return (

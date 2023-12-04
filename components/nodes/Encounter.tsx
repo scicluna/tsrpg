@@ -119,7 +119,8 @@ export default function Encounter({node, player, updatePlayer, updateNode, updat
             }
         } while (nextIndex !== currentIndex); // Continue until we loop back to the original target
     
-        return -1; // Return -1 if all monsters are dead
+        // Return -1 if all monsters are dead
+        return -1; 
     }
 
     function dealDamage(attack: Attack, target: Monster | Player, attacker: Player | Monster, color: string = "red"){
